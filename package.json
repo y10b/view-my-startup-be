@@ -1,7 +1,7 @@
 {
   "name": "6--viewmystartup-3--be",
   "version": "1.0.0",
-  "description": "",
+  "description": "### 3팀 백엔드",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/app.js",
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "cors": "^2.8.5",
     "express": "^4.21.2"
   },
   "prisma": {
