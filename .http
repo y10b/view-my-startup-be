@@ -28,4 +28,8 @@ Content-Type: application/json
 }
 
 ###
-GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/1
+GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/2
+
+
+###
+GET http://localhost:5000/api/companies/name/케이뱅크

@@ -1,5 +1,5 @@
 const express = require("express");
-const {PrismaClient} = require("@prisma/client");
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const companiesRouter = express.Router();
@@ -11,7 +11,7 @@ const companiesRouter = express.Router();
 companiesRouter.get("/", async (req, res, next) => {
   try {
     const companies = await prisma.company.findMany({
-      orderBy: {id: "asc"},
+      orderBy: { id: "asc" },
     });
 
     res.json(companies);
@@ -29,10 +29,10 @@ companiesRouter.get("/:id", async (req, res, next) => {
     const companyId = Number(req.params.id);
 
     const company = await prisma.company.findUnique({
-      where: {id: companyId},
+      where: { id: companyId },
     });
     if (!company) {
-      return res.status(404).json({message: "회사를 찾을 수 없습니다."});
+      return res.status(404).json({ message: "회사를 찾을 수 없습니다." });
     }
     res.json(company);
   } catch (e) {
@@ -60,9 +60,9 @@ companiesRouter.post("/", async (req, res, next) => {
         name,
         description,
         category,
-        ...(totalInvestment !== undefined && {totalInvestment}),
-        ...(revenue !== undefined && {revenue}),
-        ...(employees !== undefined && {employees}),
+        ...(totalInvestment !== undefined && { totalInvestment }),
+        ...(revenue !== undefined && { revenue }),
+        ...(employees !== undefined && { employees }),
       },
     });
     res.status(201).json(newCompany);
@@ -80,13 +80,13 @@ companiesRouter.delete("/:id", async (req, res, next) => {
     const id = Number(req.params.id);
 
     if (isNaN(id))
-      return res.status(400).json({message: "잘못된 ID 형식입니다."});
+      return res.status(400).json({ message: "잘못된 ID 형식입니다." });
 
     const result = await prisma.$transaction(async (tx) => {
-      const company = await tx.company.findUnique({where: {id}});
+      const company = await tx.company.findUnique({ where: { id } });
       if (!company) throw new Error("Not Found ID");
 
-      await tx.company.delete({where: {id}});
+      await tx.company.delete({ where: { id } });
       return true;
     });
     if (result) res.status(204).send();
@@ -101,22 +101,22 @@ companiesRouter.delete("/:id", async (req, res, next) => {
  */
 companiesRouter.put("/:id", async (req, res, next) => {
   try {
-    const {name, description, category, totalInvestment, revenue, employees} =
+    const { name, description, category, totalInvestment, revenue, employees } =
       req.body;
     const id = Number(req.params.id);
 
     if (isNaN(id))
-      return res.status(400).json({message: "잘못된 ID 형식입니다."});
+      return res.status(400).json({ message: "잘못된 ID 형식입니다." });
 
     const updatedCompany = await prisma.company.update({
-      where: {id},
+      where: { id },
       data: {
-        ...(name !== undefined && {name}),
-        ...(description !== undefined && {description}),
-        ...(category !== undefined && {category}),
-        ...(totalInvestment !== undefined && {totalInvestment}),
-        ...(revenue !== undefined && {revenue}),
-        ...(employees !== undefined && {employees}),
+        ...(name !== undefined && { name }),
+        ...(description !== undefined && { description }),
+        ...(category !== undefined && { category }),
+        ...(totalInvestment !== undefined && { totalInvestment }),
+        ...(revenue !== undefined && { revenue }),
+        ...(employees !== undefined && { employees }),
       },
     });
     if (!updatedCompany) throw new Error("Not Found ID");
@@ -126,4 +126,28 @@ companiesRouter.put("/:id", async (req, res, next) => {
     next(e);
   }
 });
+
+/**
+ * 기업 이름으로 조회
+ */
+companiesRouter.get("/name/:name", async (req, res, next) => {
+  try {
+
+    const { name } = req.params;
+    const company = await prisma.company.findUnique({
+      where: { name },
+    });
+
+    if (!company) {
+      return res
+        .status(404)
+        .json({ message: "회사가 없어요!" });
+    }
+
+    res.json(company);
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = companiesRouter;
