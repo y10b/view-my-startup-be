@@ -12,15 +12,21 @@ async function main() {
         totalInvestment: 1000,
         revenue: 9862,
         employees: 633,
+        teamInvestment: 1,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-01%2F2d2f17bd-097c-4011-931f-6c73c7b7b694.png&w=48&q=75",
       },
       {
         name: "성림첨단산업",
         description:
           "'성림첨단산업㈜'은 혁신적인 사고와 지속적인 기술 개발을 통하여 고객에게는 최고의 품질과 기술로 언제나 신뢰할 수 있는 파트너가, 회사 구성원에게는 자아실현을 이루는 행복한 일터가 될 것입니다. 희토류 영구 자석 응용 분야의 미래를 창조해나가는 세계적인 기업으로 나아가겠습니다.",
         category: "제조",
-        totalInvestment: 450+" 억원",
+        totalInvestment: 450,
         revenue: 1425.3,
         employees: 194,
+        teamInvestment: 2,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2024-11%2Fd17fa967-71f5-4a0c-a578-d0ec1f579c00.png&w=64&q=75",
       },
       {
         name: "빗썸",
@@ -30,6 +36,9 @@ async function main() {
         totalInvestment: 48,
         revenue: 1358,
         employees: 524,
+        teamInvestment: 3,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fstock%2F341650.png&w=64&q=75",
       },
       {
         name: "에스엠랩",
@@ -39,6 +48,9 @@ async function main() {
         totalInvestment: 2106,
         revenue: 5,
         employees: 29,
+        teamInvestment: 4,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fcompany%2F2768.png&w=64&q=75",
       },
       {
         name: "케이뱅크",
@@ -48,6 +60,9 @@ async function main() {
         totalInvestment: 10000,
         revenue: 9465,
         employees: 586,
+        teamInvestment: 5,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fstock%2F279570.png&w=64&q=75",
       },
       {
         name: "야놀자",
@@ -57,6 +72,9 @@ async function main() {
         totalInvestment: 43640,
         revenue: 3753,
         employees: 211,
+        teamInvestment: 6,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fstock%2F350920.png&w=64&q=75",
       },
       {
         name: "무신사",
@@ -66,6 +84,9 @@ async function main() {
         totalInvestment: 3200,
         revenue: 8829,
         employees: 1702,
+        teamInvestment: 7,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-12%2F694577d0-9b8c-40f3-94fa-8ae34891c1e4.png&w=64&q=75",
       },
       {
         name: "지엔티파마",
@@ -75,6 +96,9 @@ async function main() {
         totalInvestment: 10,
         revenue: 7,
         employees: 43,
+        teamInvestment: 112,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-11%2F73d37fa5-cb6a-4ad9-b984-ef79bc79e7a8.png&w=64&q=75",
       },
       {
         name: "당근마켓",
@@ -84,6 +108,9 @@ async function main() {
         totalInvestment: 2270,
         revenue: 1274,
         employees: 536,
+        teamInvestment: 21,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-09%2Fa1a896d7-32ce-490f-aaf7-49204766ed3d.png&w=64&q=75",
       },
       {
         name: "한국피엠지제약",
@@ -93,6 +120,8 @@ async function main() {
         totalInvestment: 400,
         revenue: 505,
         employees: 105,
+        teamInvestment: 12,
+        imageUrl: "http://www.pmgpharm.co.kr/img/contents/sub0104_5.png",
       },
       {
         name: "지씨지놈",
@@ -102,6 +131,9 @@ async function main() {
         totalInvestment: 181,
         revenue: 428,
         employees: 134,
+        teamInvestment: 8675,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fstock%2F340450.png&w=64&q=75",
       },
       {
         name: "아이지에이웍스",
@@ -111,6 +143,9 @@ async function main() {
         totalInvestment: 535,
         revenue: 981,
         employees: 152,
+        teamInvestment: 872,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fcompany%2F1054.png&w=64&q=75",
       },
       {
         name: "플랜택",
@@ -120,6 +155,9 @@ async function main() {
         totalInvestment: 600,
         revenue: 6793,
         employees: 609,
+        teamInvestment: 90,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-02%2F937f9e69-5d3a-4e89-9138-32445c61e7ba.png&w=64&q=75",
       },
       {
         name: "에스아이플렉스",
@@ -129,6 +167,9 @@ async function main() {
         totalInvestment: 700,
         revenue: 3178.3,
         employees: 254,
+        teamInvestment: 332,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-02%2F8a477df1-6352-4347-8d88-30eb900a0e4f.png&w=64&q=75",
       },
       {
         name: "컬리",
@@ -138,6 +179,9 @@ async function main() {
         totalInvestment: 8832,
         revenue: 20727,
         employees: 2746,
+        teamInvestment: 312,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fstock%2F408480.png&w=64&q=75",
       },
       {
         name: "덕산넵코어스",
@@ -147,6 +191,9 @@ async function main() {
         totalInvestment: 300,
         revenue: 314,
         employees: 170,
+        teamInvestment: 399,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-02%2F25286deb-ff39-4153-b084-eb5319a6f780.png&w=64&q=75",
       },
       {
         name: "로킷헬스케어",
@@ -156,6 +203,9 @@ async function main() {
         totalInvestment: 469,
         revenue: 63,
         employees: 58,
+        teamInvestment: 6423,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fcompany%2F67920.png&w=64&q=75",
       },
       {
         name: "제이비케이랩",
@@ -165,6 +215,9 @@ async function main() {
         totalInvestment: 1000,
         revenue: 460,
         employees: 165,
+        teamInvestment: 199,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-01%2F06aac63c-465d-433f-bc74-8ce6e484d613.png&w=64&q=75",
       },
       {
         name: "인투셀",
@@ -174,6 +227,9 @@ async function main() {
         totalInvestment: 502,
         revenue: 16,
         employees: 41,
+        teamInvestment: 3219,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Flogo%2Fcompany%2F208.png&w=64&q=75",
       },
       {
         name: "에이치디현대삼호",
@@ -183,6 +239,9 @@ async function main() {
         totalInvestment: 99,
         revenue: 70031.4,
         employees: 3905,
+        teamInvestment: 3676,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2023-01%2Fd9602423-0b56-419f-8737-8d30c015e379.png&w=64&q=75",
       },
       {
         name: "비바리퍼블리카",
@@ -192,10 +251,14 @@ async function main() {
         totalInvestment: 10000,
         revenue: 13706.5,
         employees: 1073,
-      },
+        teamInvestment: 366,
+        imageUrl:
+          "https://www.ustockplus.com/_next/image?url=https%3A%2F%2Fstatic.ustockplus.com%2Fadmin%2F2022-09%2F2075df61-33e0-4ecc-ba42-b95ebf15705a.png&w=64&q=75",
+      },     
     ],
+    
+
   });
-  const companies = await prisma.company.findMany();
 }
 main()
   .catch((e) => {
