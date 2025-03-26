@@ -27,7 +27,10 @@ Content-Type: application/json
   "employees": 55
 }
 
-###
+### 기업목록조회/ 셀렉박스정렬시험
+GET http://localhost:5000/api/companies?sort=revenue_desc
+
+### 배포서버실험용
 GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/2
 
 

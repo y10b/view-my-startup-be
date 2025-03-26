@@ -10,8 +10,23 @@ const companiesRouter = express.Router();
  */
 companiesRouter.get("/", async (req, res, next) => {
   try {
+    const sortKey = req.query.sort;
+
+    //정렬 기준 매핑
+    const sortMap = {
+      investment_desc: { totalInvestment: "desc" },
+      investment_asc: { totalInvestment: "asc" },
+      revenue_desc: { revenue: "desc" },
+      revenue_asc: { revenue: "asc" },
+      employee_desc: { employees: "desc" },
+      employee_asc: { employees: "asc" },
+    };
+
+    //기본 정렬, id asc
+    const orderBy = sortMap[sortKey] || { id: "asc" };
+
     const companies = await prisma.company.findMany({
-      orderBy: { id: "asc" },
+      orderBy,
     });
 
     res.json(companies);
