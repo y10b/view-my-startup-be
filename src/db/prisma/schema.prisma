@@ -8,24 +8,27 @@ datasource db {
 }
 
 model Company {
-  id              Int      @id @default(autoincrement())
-  name            String   @unique
-  description     String
-  category        String
-  totalInvestment Float    @default(0)
-  revenue         Float    @default(0)
-  employees       Float    @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  imageUrl        String?
-  teamInvestment  Float    @default(0)
+  id                 Int      @id @default(autoincrement())
+  name               String   @unique
+  description        String
+  category           String
+  totalInvestment    Float    @default(0)
+  revenue            Float    @default(0)
+  employees          Float    @default(0)
+  selectedCompany    Int      @default(0)
+  comparedCompany    Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  imageUrl           String?
+  myInvestmentAmount Float    @default(0)
 }
 
-model User {
-  id                Int      @id @default(autoincrement())
-  name              String
-  investmentAmount  Float
-  investmentComment String
-  password          String
-  createdAt         DateTime @default(now())
+model Investment {
+  id        Int      @id @default(autoincrement())
+  name      String
+  password  String
+  amount    Float
+  comment   String
+  updateAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
