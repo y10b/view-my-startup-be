@@ -2,7 +2,7 @@
 GET http://localhost:5000/api/companies
 
 ### 기업 하나 조회
-GET http://localhost:5000/api/companies/22
+GET http://localhost:5000/api/companies/70
 
 ### 기업 등록
 POST http://localhost:5000/api/companies
@@ -36,3 +36,15 @@ GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/compa
 
 ###
 GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/name/무신사
+
+
+### 특정 기업에 투자 추가
+POST http://localhost:5000/api/companies/70/investments
+Content-Type: application/json
+
+{
+  "name": "투자A",
+  "password": "1111",
+  "amount": 1000000,
+  "comment": "투자할께요요 "
+}
