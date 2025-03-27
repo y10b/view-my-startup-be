@@ -160,4 +160,21 @@ companiesRouter.get("/name/:name", async (req, res, next) => {
   }
 });
 
+// companiesRouter.get("/", async (req, res, next) => {
+//   try {
+//     const companies = await prisma.$queryRaw`
+//       SELECT
+//         c.*,
+//         (SELECT COALESCE(SUM(i.amount), 0)
+//          FROM "Investment" i
+//          WHERE i."companyId" = c.id) AS "investmentAmount"
+//       FROM "Company" c;
+//     `;
+
+//     res.json(companies);
+//   } catch (e) {
+//     next(e);
+//   }
+// });
+
 module.exports = companiesRouter;
