@@ -32,6 +32,7 @@ companiesRouter.get("/", async (req, res, next) => {
       ${orderByClause};
     `);
 
+
     res.json(companies);
   } catch (e) {
     next(e);
