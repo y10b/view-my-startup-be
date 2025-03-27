@@ -8,24 +8,29 @@ const companiesRouter = express.Router();
  * 전체 기업 목록 조회
  * GET /companies
  */
+
 companiesRouter.get("/", async (req, res, next) => {
   try {
     const sortKey = req.query.sort;
-
-    let orderBy = { id: "asc" }; // 기본값
+    let orderByClause = "ORDER BY c.id ASC"; // 기본 정렬
 
     if (sortKey) {
       const [field, direction] = sortKey.split("_");
 
-      //direction 은 asc/desc 만 허용
       if (["asc", "desc"].includes(direction)) {
-        orderBy = { [field]: direction }; // prisma 정렬 객체 생성후
+        orderByClause = `ORDER BY c."${field}" ${direction.toUpperCase()}`;
       }
     }
 
-    const companies = await prisma.company.findMany({
-      orderBy,
-    });
+    const companies = await prisma.$queryRawUnsafe(`
+      SELECT
+        c.*,
+        (SELECT COALESCE(SUM(i.amount), 0)
+        FROM "Investment" i
+        WHERE i."companyId" = c.id) AS "investmentAmount"
+      FROM "Company" c
+      ${orderByClause};
+    `);
 
     res.json(companies);
   } catch (e) {
@@ -159,22 +164,5 @@ companiesRouter.get("/name/:name", async (req, res, next) => {
     next(e);
   }
 });
-
-// companiesRouter.get("/", async (req, res, next) => {
-//   try {
-//     const companies = await prisma.$queryRaw`
-//       SELECT
-//         c.*,
-//         (SELECT COALESCE(SUM(i.amount), 0)
-//          FROM "Investment" i
-//          WHERE i."companyId" = c.id) AS "investmentAmount"
-//       FROM "Company" c;
-//     `;
-
-//     res.json(companies);
-//   } catch (e) {
-//     next(e);
-//   }
-// });
 
 module.exports = companiesRouter;
