@@ -39,5 +39,26 @@ investmentRouter.post("/:id/investments", async (req, res, next) => {
   }
 }) 
 
+/**
+ * 투자 금액 리스트 조회
+ */
+investmentRouter.get("/:id/investments", async(req, res, next) => {
+  try{
+    const companyId = Number(req.params.id)
+
+    const investments = await prisma.investment.findMany({
+      where: {companyId},
+      orderBy: {
+        amount: 'desc'
+      }
+    })
+    res.status(200).json(investments);
+  }catch(e){
+    next(e)
+  }
+})
+
+
+
 
 module.exports = investmentRouter
