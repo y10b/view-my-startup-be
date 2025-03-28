@@ -8,30 +8,31 @@ const companiesRouter = express.Router();
  * 전체 기업 목록 조회
  * GET /companies
  */
-
 companiesRouter.get("/", async (req, res, next) => {
   try {
     const sortKey = req.query.sort;
-    let orderByClause = "ORDER BY c.id ASC"; // 기본 정렬
+    let orderByClause = `ORDER BY sub.id ASC`; // 기본 정렬
 
     if (sortKey) {
       const [field, direction] = sortKey.split("_");
 
       if (["asc", "desc"].includes(direction)) {
-        orderByClause = `ORDER BY c."${field}" ${direction.toUpperCase()}`;
+        orderByClause = `ORDER BY sub."${field}" ${direction.toUpperCase()}`;
       }
     }
 
     const companies = await prisma.$queryRawUnsafe(`
-      SELECT
-        c.*,
-        (SELECT COALESCE(SUM(i.amount), 0)
-        FROM "Investment" i
-        WHERE i."companyId" = c.id) AS "investmentAmount"
-      FROM "Company" c
+      SELECT sub.*, sub."investmentAmount"
+      FROM (
+        SELECT
+          c.*,
+          (SELECT COALESCE(SUM(i.amount), 0)
+          FROM "Investment" i
+          WHERE i."companyId" = c.id) AS "investmentAmount"
+        FROM "Company" c
+      ) sub
       ${orderByClause};
     `);
-
 
     res.json(companies);
   } catch (e) {
