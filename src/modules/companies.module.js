@@ -1,6 +1,7 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
+const errorHandler = require("../middlewares/errorHandler.middleware")
 
 const companiesRouter = express.Router();
 
@@ -44,7 +45,7 @@ companiesRouter.get("/", async (req, res, next) => {
  * 단일 기업 상세 조회
  * GET /companies/:id
  */
-companiesRouter.get("/:id", async (req, res, next) => {
+companiesRouter.get("/:id", errorHandler, async (req, res, next) => {
   try {
     const companyId = Number(req.params.id);
 
@@ -62,40 +63,50 @@ companiesRouter.get("/:id", async (req, res, next) => {
 
 /**
  * 기업 생성
- * POST /companies
+ * POST /companies ver.2
  */
-companiesRouter.post("/", async (req, res, next) => {
+companiesRouter.post("/", errorHandler, async (req, res, next) => {
   try {
-    const {
-      name,
-      description,
-      category,
-      totalInvestment = undefined,
-      revenue = undefined,
-      employees = undefined,
-    } = req.body;
+    const { name, description, category, totalInvestment, revenue, employees } = req.body;
+    const companyData = { name, description, category };
 
-    const newCompany = await prisma.company.create({
-      data: {
-        name,
-        description,
-        category,
-        ...(totalInvestment !== undefined && { totalInvestment }),
-        ...(revenue !== undefined && { revenue }),
-        ...(employees !== undefined && { employees }),
-      },
+    // 필수 값 검증
+    if (!name || !description || !category) {
+      return res.status(400).json({ message: "필수 필드를 입력해주세요 (name, description, category)" });
+    }
+
+    // 이미 동일한 name이 존재하는지 확인
+    const existingCompany = await prisma.company.findUnique({
+      where: { name },
     });
+
+    if (existingCompany) {
+      return res.status(400).json({ message: "이름이 중복된 기업이 존재합니다. 다른 이름을 사용해주세요." });
+    }
+
+    // 선택적 값은 제공되었을 때만 포함
+    if (totalInvestment !== undefined) companyData.totalInvestment = totalInvestment;
+    if (revenue !== undefined) companyData.revenue = revenue;
+    if (employees !== undefined) companyData.employees = employees;
+
+    // Prisma를 통해 데이터베이스에 기업 생성
+    const newCompany = await prisma.company.create({
+      data: companyData,
+    });
+
+    // 성공적으로 생성된 기업 객체 반환
     res.status(201).json(newCompany);
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error); // 오류가 발생하면 오류 처리 미들웨어로 전달
   }
 });
+
 
 /**
  * 기업 삭제
  * DELETE /companies/:id
  */
-companiesRouter.delete("/:id", async (req, res, next) => {
+companiesRouter.delete("/:id", errorHandler, async (req, res, next) => {
   try {
     const id = Number(req.params.id);
 
@@ -119,7 +130,7 @@ companiesRouter.delete("/:id", async (req, res, next) => {
  * 기업 수정
  * PUT /companies/:id
  */
-companiesRouter.put("/:id", async (req, res, next) => {
+companiesRouter.put("/:id", errorHandler, async (req, res, next) => {
   try {
     const { name, description, category, totalInvestment, revenue, employees } =
       req.body;
@@ -150,7 +161,7 @@ companiesRouter.put("/:id", async (req, res, next) => {
 /**
  * 기업 이름으로 조회
  */
-companiesRouter.get("/name/:name", async (req, res, next) => {
+companiesRouter.get("/name/:name", errorHandler, async (req, res, next) => {
   try {
     const { name } = req.params;
     const company = await prisma.company.findUnique({

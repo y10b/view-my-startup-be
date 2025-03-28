@@ -9,29 +9,30 @@ POST http://localhost:5000/api/companies
 Content-Type: application/json
 
 {
-  "name": "3팀컴페니4",
+  "name": "커피",
+  "category":"에듀테크",
   "description": "개발자를 위한 온라인 교육 플랫폼",
-  "category": "에듀테크",
-  "totalInvestment": 1000000000
+  "totalInvestment": 10
 }
 
 ### 기업 삭제
 DELETE http://localhost:5000/api/companies/24
 
 ### 기업 수정
-PUT http://localhost:5000/api/companies/31
+PUT https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/79
 Content-Type: application/json
 
 {
-  "revenue": 999999999,
-  "employees": 55
+  "totalInvestment": 3,
+  "employees": 50,
+  "imageUrl":"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fvelog.velcdn.com%2Fimages%2Fwn8624%2Fpost%2F46aad3a9-fb99-4cd5-8b14-64a8d45b2fab%2Fimage.png&type=sc960_832"
 }
 
 ### 기업목록조회/ 셀렉박스정렬시험
 GET http://localhost:5000/api/companies?sort=investmentAmount_desc
 
 ### 배포서버실험용
-GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/2
+GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/79
 
 
 ###
