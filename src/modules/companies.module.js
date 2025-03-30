@@ -67,8 +67,7 @@ companiesRouter.get("/:id", errorHandler, async (req, res, next) => {
  */
 companiesRouter.post("/", errorHandler, async (req, res, next) => {
   try {
-    const { name, description, category, totalInvestment, revenue, employees } = req.body;
-    const companyData = { name, description, category };
+    const { name, description, category, totalInvestment, revenue, employees, selectedCompany, comparedCompany, imageUrl } = req.body;
 
     // 필수 값 검증
     if (!name || !description || !category) {
@@ -84,10 +83,18 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
       return res.status(400).json({ message: "이름이 중복된 기업이 존재합니다. 다른 이름을 사용해주세요." });
     }
 
-    // 선택적 값은 제공되었을 때만 포함
-    if (totalInvestment !== undefined) companyData.totalInvestment = totalInvestment;
-    if (revenue !== undefined) companyData.revenue = revenue;
-    if (employees !== undefined) companyData.employees = employees;
+    // 회사 데이터 객체에 필수 필드와 선택적 필드 추가
+    const companyData = {
+      name,
+      description,
+      category,
+      totalInvestment: totalInvestment || 0,
+      revenue: revenue || 0,
+      employees: employees || 0,
+      selectedCompany: selectedCompany || 0,
+      comparedCompany: comparedCompany || 0,
+      imageUrl: imageUrl || null, // 이미지 URL이 제공되지 않으면 null
+    };
 
     // Prisma를 통해 데이터베이스에 기업 생성
     const newCompany = await prisma.company.create({
