@@ -5,27 +5,29 @@ GET http://localhost:5000/api/companies
 GET http://localhost:5000/api/companies/70
 
 ### 기업 등록
-POST http://localhost:5000/api/companies
+POST http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies
 Content-Type: application/json
 
 {
-  "name": "커피",
+  "name": "클래스101",
   "category":"에듀테크",
-  "description": "개발자를 위한 온라인 교육 플랫폼",
-  "totalInvestment": 10
+  "description": "클래스101은 '모두가 사랑하는 일을 하며 살 수 있도록'이라는 비전을 가진 팀입니다.",
+  "totalInvestment": 1,
+  "employees": 2030
 }
 
 ### 기업 삭제
-DELETE http://localhost:5000/api/companies/24
+DELETE http://localhost:5000/api/companies/79
 
 ### 기업 수정
-PUT https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/79
+PUT http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/96
 Content-Type: application/json
 
 {
-  "totalInvestment": 3,
-  "employees": 50,
-  "imageUrl":"https://search.pstatic.net/sunny/?src=https%3A%2F%2Fvelog.velcdn.com%2Fimages%2Fwn8624%2Fpost%2F46aad3a9-fb99-4cd5-8b14-64a8d45b2fab%2Fimage.png&type=sc960_832"
+"revenue":13279,
+"selectedCompany": 23,
+"comparedCompany": 3,
+"imageUrl":"https://static.wanted.co.kr/images/wdes/0_4.6bd0f035.png"
 }
 
 ### 기업목록조회/ 셀렉박스정렬시험
