@@ -15,7 +15,6 @@ companiesRouter.get("/", async (req, res, next) => {
 
     // ids 조건절 추가
     let whereClause = "";
-    let queryParams = [];
 
     if (ids) {
       const idArray = ids
@@ -23,12 +22,8 @@ companiesRouter.get("/", async (req, res, next) => {
         .map(Number)
         .filter((id) => !isNaN(id));
 
-      console.log("idArray:", idArray); // 배열 확인용 로그
-      console.log("Array.isArray(idArray):", Array.isArray(idArray));
-
       if (idArray.length > 0) {
         whereClause = `WHERE sub.id IN (${idArray.join(",")})`;
-        queryParams = idArray;
       }
     }
 
