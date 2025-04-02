@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const express = require("express");
+const bcrypt = require("bcrypt");
 const prisma = new PrismaClient();
 
 const investmentRouter = express.Router();
@@ -13,26 +14,31 @@ investmentRouter.post("/:id/investments", async (req, res, next) => {
     const companyId = Number(req.params.id);
     const { name, password, amount, comment } = req.body;
 
-    //기업이 있나 확인
+    // 기업이 존재하는지 확인
     const company = await prisma.company.findUnique({
       where: { id: companyId },
     });
 
-    //없으면 404
     if (!company) {
       return res.status(404).json({ message: "회사를 찾을 수 없습니다." });
     }
 
+    // 비밀번호 해시화
+    const saltRounds = 10;
+    console.log("원본 비밀번호:", password); // 해시화 전에 비밀번호 출력
+    const hashedPassword = await bcrypt.hash(password, saltRounds); // 비밀번호 해시화
+    console.log("해시화된 비밀번호:", hashedPassword); // 해시화된 비밀번호 출력
+
     const newInvestment = await prisma.investment.create({
       data: {
         name,
-        password,
+        password: hashedPassword, // 해시화된 비밀번호 저장
         amount,
         comment,
         companyId,
       },
     });
-
+    console.log(newInvestment);
     res.status(201).json(newInvestment);
   } catch (e) {
     next(e);
