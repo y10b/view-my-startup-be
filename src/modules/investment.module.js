@@ -99,28 +99,35 @@ investmentRouter.patch(
 /**
  * 투자 내역 삭제
  */
-investmentRouter.delete(
-  "/:id/investments/:investmentId",
-  async (req, res, next) => {
-    try {
-      const investmentId = Number(req.params.investmentId);
-      const investment = await prisma.investment.findUnique({
-        where: { id: investmentId },
-      });
-      if (!investment) {
-        return res.status(404).json({ message: "투자 내역이 없습니다." });
-      }
+investmentRouter.delete("/:id/investments/:investmentId", async (req, res, next) => {
+  try {
+    const { investmentId } = req.params;
+    const { password } = req.body; 
 
-      await prisma.investment.delete({
-        where: { id: investmentId },
-      });
-      res
-        .status(200)
-        .json({ message: "투자 내역이 성공적으로 삭제되었습니다." });
-    } catch (e) {
-      next(e);
+    const investment = await prisma.investment.findUnique({
+      where: { id: Number(investmentId) },
+    });
+
+    if (!investment) {
+      return res.status(404).json({ message: "투자 내역이 없습니다." });
     }
+
+    // 비밀번호 검증 하고, 틀리면 No 삭제
+    const isValid = await bcrypt.compare(password, investment.password);
+    if (!isValid) {
+      return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
+    }
+    
+    // 비밀번호가 맞으면 삭제
+    await prisma.investment.delete({
+      where: { id: Number(investmentId) },
+    });
+
+    res.status(200).json({ message: "투자 내역이 성공적으로 삭제되었습니다." });
+  } catch (e) {
+    next(e);
   }
-);
+});
+
 
 module.exports = investmentRouter;
