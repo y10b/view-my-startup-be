@@ -1,7 +1,7 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const errorHandler = require("../middlewares/errorHandler.middleware")
+const errorHandler = require("../middlewares/errorHandler.middleware");
 
 const companiesRouter = express.Router();
 
@@ -11,15 +11,46 @@ const companiesRouter = express.Router();
  */
 companiesRouter.get("/", async (req, res, next) => {
   try {
-    const sortKey = req.query.sort;
+    const { sort, ids } = req.query;
+
+    // ids 조건절 추가
+    let whereClause = "";
+    let queryParams = [];
+
+    if (ids) {
+      const idArray = ids
+        .split(",")
+        .map(Number)
+        .filter((id) => !isNaN(id));
+
+      console.log("idArray:", idArray); // 배열 확인용 로그
+      console.log("Array.isArray(idArray):", Array.isArray(idArray));
+
+      if (idArray.length > 0) {
+        whereClause = `WHERE sub.id IN (${idArray.join(",")})`;
+        queryParams = idArray;
+      }
+    }
+
+    // 정렬 기준 전체 목록
+    const sortOptions = {
+      totalInvestment_desc: `"investmentAmount" DESC`,
+      totalInvestment_asc: `"investmentAmount" ASC`,
+      revenue_desc: `"revenue" DESC`,
+      revenue_asc: `"revenue" ASC`,
+      employees_desc: `"employees" DESC`,
+      employees_asc: `"employees" ASC`,
+      selectedCompany_desc: `"selectedCompany" DESC`,
+      selectedCompany_asc: `"selectedCompany" ASC`,
+      comparedCompany_desc: `"comparedCompany" DESC`,
+      comparedCompany_asc: `"comparedCompany" ASC`,
+    };
+
     let orderByClause = `ORDER BY sub.id ASC`; // 기본 정렬
 
-    if (sortKey) {
-      const [field, direction] = sortKey.split("_");
-
-      if (["asc", "desc"].includes(direction)) {
-        orderByClause = `ORDER BY sub."${field}" ${direction.toUpperCase()}`;
-      }
+    // 정렬 option 변경
+    if (sort && sortOptions[sort]) {
+      orderByClause = `ORDER BY ${sortOptions[sort]}`;
     }
 
     const companies = await prisma.$queryRawUnsafe(`
@@ -32,30 +63,11 @@ companiesRouter.get("/", async (req, res, next) => {
           WHERE i."companyId" = c.id) AS "investmentAmount"
         FROM "Company" c
       ) sub
+      ${whereClause}
       ${orderByClause};
     `);
 
     res.json(companies);
-  } catch (e) {
-    next(e);
-  }
-});
-
-/**
- * 단일 기업 상세 조회
- * GET /companies/:id
- */
-companiesRouter.get("/:id", errorHandler, async (req, res, next) => {
-  try {
-    const companyId = Number(req.params.id);
-
-    const company = await prisma.company.findUnique({
-      where: { id: companyId },
-    });
-    if (!company) {
-      return res.status(404).json({ message: "회사를 찾을 수 없습니다." });
-    }
-    res.json(company);
   } catch (e) {
     next(e);
   }
@@ -67,11 +79,23 @@ companiesRouter.get("/:id", errorHandler, async (req, res, next) => {
  */
 companiesRouter.post("/", errorHandler, async (req, res, next) => {
   try {
-    const { name, description, category, totalInvestment, revenue, employees, selectedCompany, comparedCompany, imageUrl } = req.body;
+    const {
+      name,
+      description,
+      category,
+      totalInvestment,
+      revenue,
+      employees,
+      selectedCompany,
+      comparedCompany,
+      imageUrl,
+    } = req.body;
 
     // 필수 값 검증
     if (!name || !description || !category) {
-      return res.status(400).json({ message: "필수 필드를 입력해주세요 (name, description, category)" });
+      return res.status(400).json({
+        message: "필수 필드를 입력해주세요 (name, description, category)",
+      });
     }
 
     // 이미 동일한 name이 존재하는지 확인
@@ -80,7 +104,9 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
     });
 
     if (existingCompany) {
-      return res.status(400).json({ message: "이름이 중복된 기업이 존재합니다. 다른 이름을 사용해주세요." });
+      return res.status(400).json({
+        message: "이름이 중복된 기업이 존재합니다. 다른 이름을 사용해주세요.",
+      });
     }
 
     // 회사 데이터 객체에 필수 필드와 선택적 필드 추가
@@ -107,7 +133,6 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
     next(error); // 오류가 발생하면 오류 처리 미들웨어로 전달
   }
 });
-
 
 /**
  * 기업 삭제
@@ -182,6 +207,26 @@ companiesRouter.get("/name/:name", errorHandler, async (req, res, next) => {
     res.json(company);
   } catch (e) {
     next(e);
+  }
+});
+
+// 기업 id로 조회
+companiesRouter.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const companyId = Number(id);
+
+    const company = await prisma.company.findUnique({
+      where: { id: companyId },
+    });
+
+    if (!company) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
+    res.json(company);
+  } catch (error) {
+    next(error);
   }
 });
 
