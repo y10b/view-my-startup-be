@@ -34,13 +34,13 @@ Content-Type: application/json
 }
 
 ### 기업목록조회/ 셀렉박스정렬시험
-GET http://localhost:5000/api/companies?sort=employees_desc
+GET http://localhost:5000/api/companies?sort=totalInvestment_asc
 
 ### 배포서버실험용
 GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/79
 
 
-###
+### 이름으로 불러오기
 GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/name/무신사
 
 
