@@ -13,7 +13,6 @@ companiesRouter.get("/", async (req, res, next) => {
   try {
     const { sort, ids } = req.query;
 
-    // ids 조건절 추가
     let whereClause = "";
     let queryParams = [];
 
@@ -23,34 +22,20 @@ companiesRouter.get("/", async (req, res, next) => {
         .map(Number)
         .filter((id) => !isNaN(id));
 
-      console.log("idArray:", idArray); // 배열 확인용 로그
-      console.log("Array.isArray(idArray):", Array.isArray(idArray));
-
       if (idArray.length > 0) {
         whereClause = `WHERE sub.id IN (${idArray.join(",")})`;
         queryParams = idArray;
+        console.log(whereClause);
       }
     }
 
-    // 정렬 기준 전체 목록
-    const sortOptions = {
-      totalInvestment_desc: `"investmentAmount" DESC`,
-      totalInvestment_asc: `"investmentAmount" ASC`,
-      revenue_desc: `"revenue" DESC`,
-      revenue_asc: `"revenue" ASC`,
-      employees_desc: `"employees" DESC`,
-      employees_asc: `"employees" ASC`,
-      selectedCompany_desc: `"selectedCompany" DESC`,
-      selectedCompany_asc: `"selectedCompany" ASC`,
-      comparedCompany_desc: `"comparedCompany" DESC`,
-      comparedCompany_asc: `"comparedCompany" ASC`,
-    };
+    let orderByClause = `ORDER BY sub.id ASC`;
 
-    let orderByClause = `ORDER BY sub.id ASC`; // 기본 정렬
-
-    // 정렬 option 변경
-    if (sort && sortOptions[sort]) {
-      orderByClause = `ORDER BY ${sortOptions[sort]}`;
+    if (sort) {
+      const [field, direction] = sort.split("_");
+      if (["asc", "desc"].includes(direction)) {
+        orderByClause = `ORDER BY sub."${field}" ${direction.toUpperCase()}`;
+      }
     }
 
     const companies = await prisma.$queryRawUnsafe(`
