@@ -120,6 +120,53 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
 });
 
 /**
+ * 기업 비교 선택 카운트 증가
+ * POST /companies/increase-selection
+ */
+companiesRouter.post(
+  "/increase-selection",
+  errorHandler,
+  async (req, res, next) => {
+    try {
+      const { myCompanyId, compareCompanyIds } = req.body;
+
+      if (!myCompanyId || !Array.isArray(compareCompanyIds)) {
+        return res
+          .status(400)
+          .json({ message: "myCompanyId와 compareCompanyIds가 필요합니다." });
+      }
+
+      //나의 기업 카운트 증가
+      await prisma.company.update({
+        where: { id: myCompanyId },
+        data: {
+          selectedCompany: { increment: 1 },
+        },
+      });
+
+      //비교 기업들 카운트 증가
+      await Promise.all(
+        compareCompanyIds.map((id) =>
+          prisma.company.update({
+            where: { id },
+            data: {
+              comparedCompany: {
+                increment: 1,
+              },
+            },
+          })
+        )
+      );
+
+      res.status(200).json({ message: "기업 선택 카운트 증가 완료" });
+    } catch (e) {
+      console.error("기업 선택 카운트 증가 실패:", e);
+      next(e);
+    }
+  }
+);
+
+/**
  * 기업 삭제
  * DELETE /companies/:id
  */

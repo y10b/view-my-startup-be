@@ -5,7 +5,7 @@ GET http://localhost:5000/api/companies
 GET http://localhost:5000/api/companies/name/두나무
 
 ### 기업 하나 조회 - id로
-GET http://localhost:5000/api/companies/70
+GET http://localhost:5000/api/companies/56
 
 ### 기업 등록
 POST http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies
@@ -18,6 +18,16 @@ Content-Type: application/json
   "totalInvestment": 1,
   "employees": 2030
 }
+
+### 기업 비교 선택 카운트 증가
+POST http://localhost:5000/api/companies/increase-selection
+Content-Type: application/json
+
+{
+  "myCompanyId": 56,
+  "compareCompanyIds": [57, 58]
+}
+
 
 ### 기업 삭제
 DELETE http://localhost:5000/api/companies/79
