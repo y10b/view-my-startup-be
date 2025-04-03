@@ -129,5 +129,35 @@ investmentRouter.delete("/:id/investments/:investmentId", async (req, res, next)
   }
 });
 
+// 투자 비밀번호 확인 요청청
+investmentRouter.post(
+  "/:id/investments/:investmentId/password",
+  async (req, res, next) => {
+    try {
+      const { investmentId } = req.params;
+      const { password } = req.body;
+
+      const investment = await prisma.investment.findUnique({
+        where: { id: Number(investmentId) },
+      });
+
+      if (!investment) {
+        return res.status(404).json({ message: "투자 내역이 없습니다." });
+      }
+
+      const isValid = await bcrypt.compare(password, investment.password);
+      if (!isValid) {
+        return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
+      }
+
+      res.status(200).json({ message: "비밀번호 확인 완료" });
+    } catch (e) {
+      console.error("서버 오류:", e);
+      next(e);
+    }
+  }
+);
+
+
 
 module.exports = investmentRouter;
