@@ -1,14 +1,14 @@
-const { PrismaClient } = require("@prisma/client");
 const express = require("express");
+const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
-const prisma = new PrismaClient();
+
+const prisma = new PrismaClient(); // 한 번만 선언
 
 const investmentRouter = express.Router();
 
 /**
  * 기업에 투자 추가(생성)
  */
-
 investmentRouter.post("/:id/investments", async (req, res, next) => {
   try {
     const companyId = Number(req.params.id);
@@ -68,30 +68,46 @@ investmentRouter.get("/:id/investments", async (req, res, next) => {
  * 투자 내역 수정
  */
 investmentRouter.patch(
-  "/:id/investments/:investmentId",
-  async (req, res, next) => {
-    try {
-      const investmentId = Number(req.params.investmentId);
-      const { amount, comment } = req.body;
+  "/:companyId/investments/:investmentId",
+  async (req, res) => {
+    const { companyId, investmentId } = req.params;
+    const { name, amount, comment, password } = req.body;
 
-      //투자 내역이 있나 찾기
+    try {
+      // 투자 정보가 존재하는지 확인
       const investment = await prisma.investment.findUnique({
-        where: { id: investmentId },
+        where: { id: parseInt(investmentId) },
       });
+
       if (!investment) {
-        return res.status(404).json({ message: "투자 내역이 없습니다." });
+        return res
+          .status(404)
+          .json({ message: "투자 정보가 존재하지 않습니다." });
       }
 
-      const updateInvestment = await prisma.investment.update({
-        where: { id: investmentId },
+      // 비밀번호가 주어졌다면, 해시화하여 저장
+      let hashedPassword = investment.password; // 기존 비밀번호 그대로 유지
+      if (password) {
+        const saltRounds = 10;
+        hashedPassword = await bcrypt.hash(password, saltRounds); // 새 비밀번호 해시화
+      }
+
+      // 수정할 데이터 구성
+      const updatedInvestment = await prisma.investment.update({
+        where: { id: parseInt(investmentId) },
         data: {
-          amount: amount || investment.amount,
-          comment: comment || investment.comment,
+          name,
+          amount, // 금액 수정
+          comment, // 코멘트 수정
+          password: hashedPassword, // 새 비밀번호가 있을 경우 수정
         },
       });
-      res.status(200).json(updateInvestment);
-    } catch (e) {
-      next(e);
+
+      // 수정된 투자 정보 응답
+      res.status(200).json(updatedInvestment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "서버에서 오류가 발생했습니다." });
     }
   }
 );

@@ -60,12 +60,14 @@ get http://localhost:5000/api/companies/69/investments
 
 
 ### 특정 기업에 투자 수정하기
-PATCH http://localhost:5000/api/companies/70/investments/1
+PATCH http://localhost:5000/api/companies/69/investments/150
 Content-Type: application/json
 
 {
-  "amount": 31000,
-  "comment": "투자금액 수정이요~"
+  "name":"새로운 이름",
+  "amount": 5000,
+  "comment": "Updated investment amount",
+  "password": "newPassword1234"
 }
 
 ### 투자 삭제
@@ -76,10 +78,10 @@ Content-Type: application/json
   "password": "1111"
 }
 
-###
+### 투자 수정 비밀번호 확인
 POST http://localhost:5000/api/companies/70/investments/146/password
 Content-Type: application/json
 
 {
   "password": "1111"
-}
+}`
