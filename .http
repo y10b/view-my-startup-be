@@ -75,3 +75,11 @@ Content-Type: application/json
 {
   "password": "1111"
 }
+
+###
+POST http://localhost:5000/api/companies/70/investments/146/password
+Content-Type: application/json
+
+{
+  "password": "1111"
+}
