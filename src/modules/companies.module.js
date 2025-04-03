@@ -11,7 +11,7 @@ const companiesRouter = express.Router();
  */
 companiesRouter.get("/", async (req, res, next) => {
   try {
-    const { sort, ids } = req.query;
+    const { sort, ids, page = 1, itemsPerPage = 10 } = req.query;
 
     let whereClause = "";
     let queryParams = [];
@@ -25,7 +25,6 @@ companiesRouter.get("/", async (req, res, next) => {
       if (idArray.length > 0) {
         whereClause = `WHERE sub.id IN (${idArray.join(",")})`;
         queryParams = idArray;
-        console.log(whereClause);
       }
     }
 
@@ -38,6 +37,10 @@ companiesRouter.get("/", async (req, res, next) => {
       }
     }
 
+    // 페이지네이션을 위한 LIMIT과 OFFSET
+    const offset = (page - 1) * itemsPerPage;
+    const limit = itemsPerPage;
+
     const companies = await prisma.$queryRawUnsafe(`
       SELECT sub.*, sub."investmentAmount"
       FROM (
@@ -49,10 +52,18 @@ companiesRouter.get("/", async (req, res, next) => {
         FROM "Company" c
       ) sub
       ${whereClause}
-      ${orderByClause};
+      ${orderByClause}
+      LIMIT ${limit} OFFSET ${offset};
     `);
 
-    res.json(companies);
+    // 전체 데이터의 개수를 구하여 총 페이지 수 계산
+    const totalCompanies = await prisma.company.count();
+
+    res.json({
+      companies,
+      totalPages: Math.ceil(totalCompanies / itemsPerPage), // 전체 페이지 수
+      currentPage: Number(page), // 현재 페이지
+    });
   } catch (e) {
     next(e);
   }
