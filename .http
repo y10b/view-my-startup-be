@@ -74,11 +74,11 @@ Content-Type: application/json
 DELETE  http://localhost:5000/api/companies/69/investments/68
 Content-Type: application/json
 
-{
+{`
   "password": "1111"
 }
 
-###
+### 투자 수정 비밀번호 확인
 POST http://localhost:5000/api/companies/70/investments/146/password
 Content-Type: application/json
 
