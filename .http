@@ -12,11 +12,9 @@ POST http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/compa
 Content-Type: application/json
 
 {
-  "name": "클래스101",
   "category":"에듀테크",
-  "description": "클래스101은 '모두가 사랑하는 일을 하며 살 수 있도록'이라는 비전을 가진 팀입니다.",
-  "totalInvestment": 1,
-  "employees": 2030
+  "description": "안녕하세요 저희팀은 최강입니다 👑👑👑👑👑👑👑",
+  "totalInvestment": 1
 }
 
 ### 기업 비교 선택 카운트 증가
