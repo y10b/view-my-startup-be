@@ -42,13 +42,15 @@ npm run dev
 ### 이 프로젝트는 다음 기술 스택을 사용하여 개발되었습니다:
 
 <p align="center">
+  <img src="https://img.shields.io/badge/npm-CB3837?style=flat&logo=npm&logoColor=white" alt="npm" />
 <img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white" alt="Node.js" />
 <img src="https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white" alt="Express" />
 <img src="https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white" alt="PostgreSQL" />
 <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white" alt="Prisma" />
 <img src="https://img.shields.io/badge/CloudType-4285F4?style=flat&logo=google-cloud&logoColor=white" alt="CloudType" />
 <img src="https://img.shields.io/badge/REST%20API-25D366?style=flat&logo=api&logoColor=white" alt="REST API" />
-
+ <img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white" alt="Git" />
+  <img src="https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white" alt="GitHub" />
 </p>
 
 ## 팀원 소개
