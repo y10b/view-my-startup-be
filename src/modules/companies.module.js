@@ -23,7 +23,6 @@ companiesRouter.get("/", async (req, res, next) => {
       if (idArray.length > 0) {
         whereClause = `WHERE sub.id IN (${idArray.join(",")})`;
         queryParams = idArray;
-        console.log(whereClause);
       }
     }
 
@@ -162,7 +161,6 @@ companiesRouter.post("/increase-selection", async (req, res, next) => {
 
     res.status(200).json({ message: "기업 선택 카운트 증가 완료" });
   } catch (e) {
-    console.error("기업 선택 카운트 증가 실패:", e);
     next(e);
   }
 });

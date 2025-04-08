@@ -19,5 +19,5 @@ app.use("/api", router);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Server started at port ${PORT}...`);
+  
 });
