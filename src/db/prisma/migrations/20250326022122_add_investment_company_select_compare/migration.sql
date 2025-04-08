@@ -1,15 +1,10 @@
-/*
-  Warnings:
-
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 -- AlterTable
-ALTER TABLE "Company" ADD COLUMN     "compareCompany" INTEGER NOT NULL DEFAULT 0,
-ADD COLUMN     "selectCompany" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "Company" 
+  ADD COLUMN "compareCompany" INTEGER NOT NULL DEFAULT 0,
+  ADD COLUMN "selectCompany" INTEGER NOT NULL DEFAULT 0;
 
--- DropTable
-DROP TABLE "User";
+-- DropTable (존재할 때만 삭제)
+DROP TABLE IF EXISTS "User";
 
 -- CreateTable
 CREATE TABLE "Investment" (
