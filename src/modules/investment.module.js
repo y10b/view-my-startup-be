@@ -1,8 +1,6 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client");
+const prisma = require("../db/prisma/client.prisma");
 const bcrypt = require("bcrypt");
-
-const prisma = new PrismaClient(); // 한 번만 선언
 
 const investmentRouter = express.Router();
 
