@@ -1,11 +1,8 @@
 ### 전체 기업 목록 조회 (이름순 정렬)
 GET http://localhost:5000/api/companies
 
-### 기업 하나 조회 - 이름으로
-GET http://localhost:5000/api/companies/name/두나무
-
 ### 기업 하나 조회 - id로
-GET http://localhost:5000/api/companies/56
+GET http://localhost:5000/api/companies/1
 
 ### 기업 등록
 POST http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies
@@ -14,7 +11,7 @@ Content-Type: application/json
 {
   "category":"에듀테크",
   "description": "안녕하세요 저희팀은 최강입니다 👑👑👑👑👑👑👑",
-  "totalInvestment": 1
+  "realInvestmentAmount": 1
 }
 
 ### 기업 비교 선택 카운트 증가
@@ -22,8 +19,8 @@ POST http://localhost:5000/api/companies/increase-selection
 Content-Type: application/json
 
 {
-  "myCompanyId": 56,
-  "compareCompanyIds": [57, 58]
+  "myCompanyId": 1,
+  "compareCompanyIds": [2, 3]
 }
 
 
@@ -31,18 +28,15 @@ Content-Type: application/json
 DELETE http://localhost:5000/api/companies/104
 
 ### 기업 수정
-PUT http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/96
+PUT http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/1
 Content-Type: application/json
 
 {
 "revenue":13279,
-"selectedCompany": 23,
-"comparedCompany": 3,
-"imageUrl":"https://static.wanted.co.kr/images/wdes/0_4.6bd0f035.png"
 }
 
 ### 기업목록조회/ 셀렉박스정렬시험
-GET http://localhost:5000/api/companies?sort=totalInvestment_asc
+GET http://localhost:5000/api/companies?sort=investmentAmount_desc
 
 ### 배포서버실험용
 GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/79
@@ -53,7 +47,7 @@ GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/compa
 
 
 ### 특정 기업에 투자 추가
-POST http://localhost:5000/api/investment/1/investments
+POST http://localhost:5000/api/investments/1/investments
 Content-Type: application/json
 
 {

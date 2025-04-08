@@ -1,6 +1,5 @@
 const express = require("express");
 const prisma = require("../db/prisma/client.prisma");
-const errorHandler = require("../middlewares/errorHandler.middleware");
 
 const companiesRouter = express.Router();
 
