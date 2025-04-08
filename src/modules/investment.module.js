@@ -9,12 +9,12 @@ const investmentRouter = express.Router();
 /**
  * 기업에 투자 추가(생성)
  */
-investmentRouter.post("/:id/investments", async (req, res, next) => {
+investmentRouter.post("/:companyId/investments", async (req, res, next) => {
   try {
-    const companyId = Number(req.params.id);
-    const { name, password, amount, comment } = req.body;
+    const companyId = Number(req.params.companyId);
+    const { investorName, accessCode, investedAmount, comment } = req.body;
 
-    // 기업이 존재하는지 확인
+    // 회사 존재 여부 확인
     const company = await prisma.company.findUnique({
       where: { id: companyId },
     });
@@ -25,37 +25,37 @@ investmentRouter.post("/:id/investments", async (req, res, next) => {
 
     // 비밀번호 해시화
     const saltRounds = 10;
-    console.log("원본 비밀번호:", password); // 해시화 전에 비밀번호 출력
-    const hashedPassword = await bcrypt.hash(password, saltRounds); // 비밀번호 해시화
-    console.log("해시화된 비밀번호:", hashedPassword); // 해시화된 비밀번호 출력
+    const hashedPassword = await bcrypt.hash(accessCode, saltRounds);
 
+    // 투자 정보 저장
     const newInvestment = await prisma.investment.create({
       data: {
-        name,
-        password: hashedPassword, // 해시화된 비밀번호 저장
-        amount,
+        investorName,
+        accessCode: hashedPassword,
+        investedAmount,
         comment,
         companyId,
       },
     });
-    console.log(newInvestment);
+
     res.status(201).json(newInvestment);
   } catch (e) {
     next(e);
   }
 });
 
+
 /**
  * 투자 금액 리스트 조회
  */
-investmentRouter.get("/:id/investments", async (req, res, next) => {
+investmentRouter.get("/:companyId/investments", async (req, res, next) => {
   try {
-    const companyId = Number(req.params.id);
+    const companyId = Number(req.params.companyId);
 
     const investments = await prisma.investment.findMany({
       where: { companyId },
       orderBy: {
-        amount: "desc",
+        investedAmount: "desc",
       },
     });
     res.status(200).json(investments);
@@ -71,7 +71,7 @@ investmentRouter.patch(
   "/:companyId/investments/:investmentId",
   async (req, res) => {
     const { companyId, investmentId } = req.params;
-    const { name, amount, comment, password } = req.body;
+    const { companyName, investedAmount, comment, accessCode } = req.body;
 
     try {
       // 투자 정보가 존재하는지 확인
@@ -86,20 +86,20 @@ investmentRouter.patch(
       }
 
       // 비밀번호가 주어졌다면, 해시화하여 저장
-      let hashedPassword = investment.password; // 기존 비밀번호 그대로 유지
-      if (password) {
+      let hashedPassword = investment.accessCode; // 기존 비밀번호 그대로 유지
+      if (accessCode) {
         const saltRounds = 10;
-        hashedPassword = await bcrypt.hash(password, saltRounds); // 새 비밀번호 해시화
+        hashedPassword = await bcrypt.hash(accessCode, saltRounds); // 새 비밀번호 해시화
       }
 
       // 수정할 데이터 구성
       const updatedInvestment = await prisma.investment.update({
         where: { id: parseInt(investmentId) },
         data: {
-          name,
-          amount, // 금액 수정
+          companyName,
+          investedAmount, // 금액 수정
           comment, // 코멘트 수정
-          password: hashedPassword, // 새 비밀번호가 있을 경우 수정
+          accessCode: hashedPassword, // 새 비밀번호가 있을 경우 수정
         },
       });
 
@@ -115,10 +115,10 @@ investmentRouter.patch(
 /**
  * 투자 내역 삭제
  */
-investmentRouter.delete("/:id/investments/:investmentId", async (req, res, next) => {
+investmentRouter.delete("/:companyId/investments/:investmentId", async (req, res, next) => {
   try {
     const { investmentId } = req.params;
-    const { password } = req.body; 
+    const { accessCode } = req.body; 
 
     const investment = await prisma.investment.findUnique({
       where: { id: Number(investmentId) },
@@ -129,7 +129,7 @@ investmentRouter.delete("/:id/investments/:investmentId", async (req, res, next)
     }
 
     // 비밀번호 검증 하고, 틀리면 No 삭제
-    const isValid = await bcrypt.compare(password, investment.password);
+    const isValid = await bcrypt.compare(accessCode, investment.accessCode);
     if (!isValid) {
       return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
     }
@@ -147,11 +147,11 @@ investmentRouter.delete("/:id/investments/:investmentId", async (req, res, next)
 
 // 투자 비밀번호 확인 요청청
 investmentRouter.post(
-  "/:id/investments/:investmentId/password",
+  "/:companyId/investments/:investmentId/accessCode",
   async (req, res, next) => {
     try {
       const { investmentId } = req.params;
-      const { password } = req.body;
+      const { accessCode } = req.body;
 
       const investment = await prisma.investment.findUnique({
         where: { id: Number(investmentId) },
@@ -161,7 +161,7 @@ investmentRouter.post(
         return res.status(404).json({ message: "투자 내역이 없습니다." });
       }
 
-      const isValid = await bcrypt.compare(password, investment.password);
+      const isValid = await bcrypt.compare(accessCode, investment.accessCode);
       if (!isValid) {
         return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
       }
