@@ -47,22 +47,22 @@ GET https://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/compa
 
 
 ### 특정 기업에 투자 추가
-POST http://localhost:5000/api/investments/1/investments
+POST http://localhost:5000/api/investments?companyId=2
 Content-Type: application/json
 
 {
-  "investorName": "투자c",
+  "investorName": "투자A",
   "accessCode": "1111",
-  "investedAmount": 1000000,
-  "comment": "투자할께요 "
+  "investedAmount": 11,
+  "comment": "투자할께요1 "
 }
 
 ### 특정 기업에 투자한 사람 보기기
-get http://localhost:5000/api/investment/1/investments
+get http://localhost:5000/api/investments?companyId=2
 
 
 ### 특정 기업에 투자 수정하기
-PATCH http://localhost:5000/api/investment/1/investments/1
+PATCH http://localhost:5000/api/investments/5
 Content-Type: application/json
 
 {
@@ -73,7 +73,7 @@ Content-Type: application/json
 }
 
 ### 투자 삭제
-DELETE  http://localhost:5000/api/investment/1/investments/1
+DELETE  http://localhost:5000/api/investments/5
 Content-Type: application/json
 
 {
@@ -81,9 +81,9 @@ Content-Type: application/json
 }
 
 ### 투자 수정 비밀번호 확인
-POST http://localhost:5000/api/investment/1/investments/1/accessCode
+POST http://localhost:5000/api/investments/6/accessCode
 Content-Type: application/json
 
 {
-  "accessCode": "1111"
+  "accessCode": "1110"
 }

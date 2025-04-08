@@ -7,9 +7,9 @@ const investmentRouter = express.Router();
 /**
  * 기업에 투자 추가(생성)
  */
-investmentRouter.post("/:companyId/investments", async (req, res, next) => {
+investmentRouter.post("/", async (req, res, next) => {
   try {
-    const companyId = Number(req.params.companyId);
+    const companyId = Number(req.query.companyId);
     const { investorName, accessCode, investedAmount, comment } = req.body;
 
     // 회사 존재 여부 확인
@@ -42,13 +42,12 @@ investmentRouter.post("/:companyId/investments", async (req, res, next) => {
   }
 });
 
-
 /**
  * 투자 금액 리스트 조회
  */
-investmentRouter.get("/:companyId/investments", async (req, res, next) => {
+investmentRouter.get("/", async (req, res, next) => {
   try {
-    const companyId = Number(req.params.companyId);
+    const companyId = Number(req.query.companyId);
 
     const investments = await prisma.investment.findMany({
       where: { companyId },
@@ -65,58 +64,50 @@ investmentRouter.get("/:companyId/investments", async (req, res, next) => {
 /**
  * 투자 내역 수정
  */
-investmentRouter.patch(
-  "/:companyId/investments/:investmentId",
-  async (req, res) => {
-    const { companyId, investmentId } = req.params;
-    const { companyName, investedAmount, comment, accessCode } = req.body;
+investmentRouter.patch("/:investmentId", async (req, res) => {
+  const { investmentId } = req.params;
+  const { investorName, investedAmount, comment, accessCode } = req.body;
 
-    try {
-      // 투자 정보가 존재하는지 확인
-      const investment = await prisma.investment.findUnique({
-        where: { id: parseInt(investmentId) },
-      });
+  try {
+    const investment = await prisma.investment.findUnique({
+      where: { id: parseInt(investmentId) },
+    });
 
-      if (!investment) {
-        return res
-          .status(404)
-          .json({ message: "투자 정보가 존재하지 않습니다." });
-      }
-
-      // 비밀번호가 주어졌다면, 해시화하여 저장
-      let hashedPassword = investment.accessCode; // 기존 비밀번호 그대로 유지
-      if (accessCode) {
-        const saltRounds = 10;
-        hashedPassword = await bcrypt.hash(accessCode, saltRounds); // 새 비밀번호 해시화
-      }
-
-      // 수정할 데이터 구성
-      const updatedInvestment = await prisma.investment.update({
-        where: { id: parseInt(investmentId) },
-        data: {
-          companyName,
-          investedAmount, // 금액 수정
-          comment, // 코멘트 수정
-          accessCode: hashedPassword, // 새 비밀번호가 있을 경우 수정
-        },
-      });
-
-      // 수정된 투자 정보 응답
-      res.status(200).json(updatedInvestment);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "서버에서 오류가 발생했습니다." });
+    if (!investment) {
+      return res
+        .status(404)
+        .json({ message: "투자 정보가 존재하지 않습니다." });
     }
+
+    let hashedPassword = investment.accessCode;
+    if (accessCode) {
+      const saltRounds = 10;
+      hashedPassword = await bcrypt.hash(accessCode, saltRounds);
+    }
+
+    const updatedInvestment = await prisma.investment.update({
+      where: { id: parseInt(investmentId) },
+      data: {
+        investorName,
+        investedAmount,
+        comment,
+        accessCode: hashedPassword,
+      },
+    });
+
+    res.status(200).json(updatedInvestment);
+  } catch (error) {
+    res.status(500).json({ message: "서버에서 오류가 발생했습니다." });
   }
-);
+});
 
 /**
  * 투자 내역 삭제
  */
-investmentRouter.delete("/:companyId/investments/:investmentId", async (req, res, next) => {
+investmentRouter.delete("/:investmentId", async (req, res, next) => {
   try {
     const { investmentId } = req.params;
-    const { accessCode } = req.body; 
+    const { accessCode } = req.body;
 
     const investment = await prisma.investment.findUnique({
       where: { id: Number(investmentId) },
@@ -131,7 +122,7 @@ investmentRouter.delete("/:companyId/investments/:investmentId", async (req, res
     if (!isValid) {
       return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
     }
-    
+
     // 비밀번호가 맞으면 삭제
     await prisma.investment.delete({
       where: { id: Number(investmentId) },
@@ -144,34 +135,28 @@ investmentRouter.delete("/:companyId/investments/:investmentId", async (req, res
 });
 
 // 투자 비밀번호 확인 요청청
-investmentRouter.post(
-  "/:companyId/investments/:investmentId/accessCode",
-  async (req, res, next) => {
-    try {
-      const { investmentId } = req.params;
-      const { accessCode } = req.body;
+investmentRouter.post("/:investmentId/accessCode", async (req, res, next) => {
+  try {
+    const { investmentId } = req.params;
+    const { accessCode } = req.body;
 
-      const investment = await prisma.investment.findUnique({
-        where: { id: Number(investmentId) },
-      });
+    const investment = await prisma.investment.findUnique({
+      where: { id: Number(investmentId) },
+    });
 
-      if (!investment) {
-        return res.status(404).json({ message: "투자 내역이 없습니다." });
-      }
-
-      const isValid = await bcrypt.compare(accessCode, investment.accessCode);
-      if (!isValid) {
-        return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
-      }
-
-      res.status(200).json({ message: "비밀번호 확인 완료" });
-    } catch (e) {
-      console.error("서버 오류:", e);
-      next(e);
+    if (!investment) {
+      return res.status(404).json({ message: "투자 내역이 없습니다." });
     }
+
+    const isValid = await bcrypt.compare(accessCode, investment.accessCode);
+    if (!isValid) {
+      return res.status(401).json({ message: "비밀번호가 틀렸습니다." });
+    }
+
+    res.status(200).json({ message: "비밀번호 확인 완료" });
+  } catch (e) {
+    next(e);
   }
-);
-
-
+});
 
 module.exports = investmentRouter;
