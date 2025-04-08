@@ -58,11 +58,12 @@ companiesRouter.get("/", async (req, res, next) => {
   }
 });
 
+
 /**
- * 기업 생성
- * POST /companies ver.2
+ * 기업 추가 API
+ * POST
  */
-companiesRouter.post("/", errorHandler, async (req, res, next) => {
+companiesRouter.post("/", async (req, res, next) => {
   try {
     const {
       name,
@@ -79,6 +80,7 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
     // 필수 값 검증
     if (!name || !description || !category) {
       return res.status(400).json({
+        success: false,
         message: "필수 필드를 입력해주세요 (name, description, category)",
       });
     }
@@ -90,6 +92,7 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
 
     if (existingCompany) {
       return res.status(400).json({
+        success: false,
         message: "이름이 중복된 기업이 존재합니다. 다른 이름을 사용해주세요.",
       });
     }
@@ -113,11 +116,16 @@ companiesRouter.post("/", errorHandler, async (req, res, next) => {
     });
 
     // 성공적으로 생성된 기업 객체 반환
-    res.status(201).json(newCompany);
+    res.status(201).json({
+      success: true,
+      message: "기업이 성공적으로 생성되었습니다.",
+      data: newCompany, // 생성된 기업 데이터를 data 필드로 반환
+    });
   } catch (error) {
     next(error); // 오류가 발생하면 오류 처리 미들웨어로 전달
   }
 });
+
 
 /**
  * 기업 비교 선택 카운트 증가
