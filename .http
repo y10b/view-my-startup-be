@@ -28,7 +28,7 @@ Content-Type: application/json
 
 
 ### 기업 삭제
-DELETE http://localhost:5000/api/companies/79
+DELETE http://localhost:5000/api/companies/104
 
 ### 기업 수정
 PUT http://port-0-viewmystartup-3-m8ml2ohm3e1c28b1.sel4.cloudtype.app/api/companies/96
@@ -72,10 +72,10 @@ PATCH http://localhost:5000/api/companies/69/investments/150
 Content-Type: application/json
 
 {
-  "name":"새로운 이름",
-  "amount": 5000,
-  "comment": "Updated investment amount",
-  "password": "newPassword1234"
+  "name" : "투자1",
+  "password" : 111,
+  "amount": 31000,
+  "comment": "투자금액 수정이요~"
 }
 
 ### 투자 삭제
