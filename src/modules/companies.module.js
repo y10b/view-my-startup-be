@@ -29,9 +29,35 @@ companiesRouter.get("/", async (req, res, next) => {
     let orderByClause = `ORDER BY sub.id ASC`;
 
     if (sort) {
-      const [field, direction] = sort.split("_");
-      if (["asc", "desc"].includes(direction)) {
-        orderByClause = `ORDER BY sub."${field}" ${direction.toUpperCase()}`;
+      const [rawField, direction] = sort.split("_");
+
+      const allowedDirection = ["asc", "desc"].includes(direction)
+        ? direction.toUpperCase()
+        : null;
+
+      const sortFieldMap = {
+        // 요청 필드명 -> 실제 컬럼명
+        id: "id",
+        name: "name",
+        companyName: "name",
+        revenue: "revenue",
+        realInvestmentAmount: "totalInvestment",
+        totalInvestment: "totalInvestment",
+        employeesNumber: "employees",
+        employees: "employees",
+        selectedNumber: "selectedCompany",
+        selectedCompany: "selectedCompany",
+        comparedNumber: "comparedCompany",
+        comparedCompany: "comparedCompany",
+        investmentAmount: "investmentAmount", // 서브쿼리 별칭
+        createdAt: "createdAt",
+        updatedAt: "updatedAt",
+      };
+
+      const mappedField = sortFieldMap[rawField];
+
+      if (allowedDirection && mappedField) {
+        orderByClause = `ORDER BY sub."${mappedField}" ${allowedDirection}`;
       }
     }
 
