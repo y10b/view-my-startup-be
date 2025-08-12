@@ -8,7 +8,7 @@ const PORT = 5000;
 
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:5000", "https://view-my-startup-fe.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -19,5 +19,5 @@ app.use("/api", router);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  
+  console.log(`Server is running on port ${PORT}`);
 });
