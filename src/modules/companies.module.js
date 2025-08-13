@@ -36,20 +36,20 @@ companiesRouter.get("/", async (req, res, next) => {
         : null;
 
       const sortFieldMap = {
-        // 요청 필드명 -> 실제 컬럼명
+        // 요청 필드명 -> 서브쿼리 별칭 컬럼명
         id: "id",
-        name: "name",
-        companyName: "name",
+        name: "companyName",
+        companyName: "companyName",
         revenue: "revenue",
-        realInvestmentAmount: "totalInvestment",
-        totalInvestment: "totalInvestment",
-        employeesNumber: "employees",
-        employees: "employees",
-        selectedNumber: "selectedCompany",
-        selectedCompany: "selectedCompany",
-        comparedNumber: "comparedCompany",
-        comparedCompany: "comparedCompany",
-        investmentAmount: "investmentAmount", // 서브쿼리 별칭
+        realInvestmentAmount: "realInvestmentAmount",
+        totalInvestment: "realInvestmentAmount",
+        employeesNumber: "employeesNumber",
+        employees: "employeesNumber",
+        selectedNumber: "selectedNumber",
+        selectedCompany: "selectedNumber",
+        comparedNumber: "comparedNumber",
+        comparedCompany: "comparedNumber",
+        investmentAmount: "investmentAmount",
         createdAt: "createdAt",
         updatedAt: "updatedAt",
       };
@@ -65,10 +65,21 @@ companiesRouter.get("/", async (req, res, next) => {
       SELECT sub.*, sub."investmentAmount"
       FROM (
         SELECT
-          c.*,
-          (SELECT COALESCE(SUM(i."investedAmount"), 0)
-          FROM "Investment" i
-          WHERE i."companyId" = c.id) AS "investmentAmount"
+          c.id AS "id",
+          c."name" AS "companyName",
+          c."description" AS "description",
+          c."category" AS "category",
+          c."totalInvestment" AS "realInvestmentAmount",
+          c."revenue" AS "revenue",
+          c."employees" AS "employeesNumber",
+          c."selectedCompany" AS "selectedNumber",
+          c."comparedCompany" AS "comparedNumber",
+          c."createdAt" AS "createdAt",
+          c."updatedAt" AS "updatedAt",
+          c."imageUrl" AS "imageUrl",
+          (SELECT COALESCE(SUM(i."amount"), 0)
+           FROM "Investment" i
+           WHERE i."companyId" = c.id) AS "investmentAmount"
         FROM "Company" c
       ) sub
       ${whereClause}
