@@ -24,10 +24,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 app.use(express.json());
-// 루트 헬스체크: 인프라 → 앱 도달 여부 빠른 확인용
-app.get("/health-check", (req, res) => {
-  res.status(200).send("OK(ROOT)");
-});
+
 app.use("/api", router);
 app.use(errorHandler);
 
